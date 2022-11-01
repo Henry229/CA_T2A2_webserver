@@ -15,7 +15,7 @@ class Employee(db.Model):
     
 class EmployeeSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'name', 'email', 'salary','hire_date')
+        fields = ('id', 'name', 'email', 'password', 'salary','hire_date')
         ordered = True        
     
     
