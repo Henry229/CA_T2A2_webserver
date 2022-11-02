@@ -7,7 +7,7 @@ class Department(db.Model):
     department_name = db.Column(db.String)
     manager_id = db.Column(db.Integer)
     
-class EmployeeSchema(ma.Schema):
+class DepartmentSchema(ma.Schema):
     class Meta:
         fields = ('id', 'department_name')
     

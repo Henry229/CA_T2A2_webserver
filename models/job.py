@@ -8,6 +8,8 @@ class Job(db.Model):
     min_salary = db.Column(db.Integer)
     max_salary = db.Column(db.Integer)
     
+    employees = db.relationship('Employee', back_populates ='job', cascade='all, delete')
+    
 class JobSchema(ma.Schema):
     class Meta:
         fields = ('id', 'job_title', 'min_salary', 'max_salary')

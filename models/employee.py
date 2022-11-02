@@ -9,9 +9,13 @@ class Employee(db.Model):
     password = db.Column(db.String, nullable=False)
     hire_date = db.Column(db.Date)
     salary = db.Column(db.Integer)
-    job_id = db.Column(db.Integer)
-    manager_id = db.Column(db.Integer)
-    department_id = db.Column(db.Integer)
+
+    job_id = db.Column(db.Integer, db.ForeignKey('jobs.id'), nullable=False)
+    # manager_id = db.Column(db.Integer, db.ForeignKey('manager.id'), nullable=False)
+    # department_id = db.Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
+    
+    job = db.relationship('Job', back_populates ='employees')
+    
     
 class EmployeeSchema(ma.Schema):
     class Meta:
