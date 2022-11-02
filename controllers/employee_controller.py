@@ -24,6 +24,7 @@ def employee_get_one(id):
     
 
 @employee_bp.route('/', methods=['POST'])
+@jwt_required()
 def employee_create_one():
     try:
         employee = Employee(
@@ -31,7 +32,9 @@ def employee_create_one():
             name = request.json['name'],
             password = bcrypt.generate_password_hash(request.json['password']).decode('utf-8'),
             hire_date = date.today(),
-            salary = request.json['salary']
+            salary = request.json['salary'],
+            job_id = request.json['job_id'],
+            department_id = request.json['department_id']
         )
         db.session.add(employee)
         db.session.commit()

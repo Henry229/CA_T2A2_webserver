@@ -1,4 +1,5 @@
 from init import db, ma
+from marshmallow import fields
 
 class Employee(db.Model):
     __tablename__ = 'employees'
@@ -21,8 +22,10 @@ class Employee(db.Model):
     
     
 class EmployeeSchema(ma.Schema):
+    job = fields.Nested('JobSchema', exclude=['max_salary', 'min_salary'])
+    department = fields.Nested('DepartmentSchema')
     class Meta:
-        fields = ('id', 'name', 'email', 'password', 'salary','hire_date')
+        fields = ('id', 'name', 'email', 'password', 'salary','hire_date', 'job', 'department')
         ordered = True        
     
     

@@ -1,4 +1,5 @@
 from init import db, ma
+from marshmallow import fields
 
 class Hrstaff(db.Model):
     __tablename__ = 'hrstaffs'
@@ -10,6 +11,7 @@ class Hrstaff(db.Model):
     employees = db.relationship('Employee', back_populates ='hrstaffs')
     
 class HrstaffSchema(ma.Schema):
+    employees = fields.Nested('EmployeeSchema', exclude=['password'])
     class Meta:
-        fields = ('id', 'is_admin')
+        fields = ('id', 'is_admin', 'employees')
     
