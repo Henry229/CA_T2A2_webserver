@@ -11,10 +11,13 @@ class Employee(db.Model):
     salary = db.Column(db.Integer)
 
     job_id = db.Column(db.Integer, db.ForeignKey('jobs.id'), nullable=False)
-    # manager_id = db.Column(db.Integer, db.ForeignKey('manager.id'), nullable=False)
-    # department_id = db.Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
+    department_id = db.Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
+    # manager_id = db.Column(db.Integer, db.ForeignKey('managements.id'), nullable=False)
     
     job = db.relationship('Job', back_populates ='employees')
+    department = db.relationship('Department', back_populates ='employees')
+    
+    hrstaffs = db.relationship('Hrstaff', back_populates ='employees', cascade='all, delete')
     
     
 class EmployeeSchema(ma.Schema):
