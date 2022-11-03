@@ -17,11 +17,15 @@ def create_app():
     
     @app.errorhandler(404)
     def not_found(err):
-        return {'error': str(err)}, 440
+        return {'error': str(err)}, 404
     
     @app.errorhandler(401)
     def unauthorized(err):
         return {'error': str(err)}, 401
+    
+    @app.errorhandler(KeyError)
+    def key_error(err):
+        return{'error': f'The field {err} is required'}, 400
     
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
     app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY')

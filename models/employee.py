@@ -1,11 +1,13 @@
 from init import db, ma
-from marshmallow import fields
+from marshmallow import fields, validates
+from marshmallow.validate import Length, OneOf, And, Regexp
+from marshmallow.exceptions import ValidationError
 
 class Employee(db.Model):
     __tablename__ = 'employees'
     
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100))
+    name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String, nullable=False, unique=True)
     password = db.Column(db.String, nullable=False)
     hire_date = db.Column(db.Date)
@@ -24,6 +26,28 @@ class Employee(db.Model):
 class EmployeeSchema(ma.Schema):
     job = fields.Nested('JobSchema', exclude=['max_salary', 'min_salary'])
     department = fields.Nested('DepartmentSchema')
+    email = fields.String(required=True, validate=Length(min=2, error='Email must be at least 2 characters long'))
+    name = fields.String(required=True, validate=Length(min=2, error='Name must be at least 2 characters long'))
+    
+    @validates('name')
+    def validate_name(self, value):
+        # if not value:
+            # raise AssertionError('Name cannot be blank')
+        stmt = db.select(Employee).filter_by(name = value)
+        name_check = db.session.scalar(stmt)
+        print('####yogida5 :', name_check.name, '/', value)
+        if name_check:
+            raise ValidationError('You already have the same name')
+
+    @validates('email')
+    def validate_email(self, value):
+        if "@" not in value:
+            raise ValidationError('failed email validation')
+        stmt = db.select(Employee).filter_by(email = value)
+        email_check = db.session.scalar(stmt)
+        if email_check:
+            raise ValidationError('You already have the same email')
+        
     class Meta:
         fields = ('id', 'name', 'email', 'password', 'salary','hire_date', 'job', 'department')
         ordered = True        

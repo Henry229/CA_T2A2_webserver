@@ -4,6 +4,7 @@ from sqlalchemy.exc import IntegrityError
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 from init import db, bcrypt
 from models.employee import Employee, EmployeeSchema
+from controllers.auth_controller import authorize
 
 employee_bp = Blueprint('employee', __name__, url_prefix='/employee')
 
@@ -27,6 +28,7 @@ def employee_get_one(id):
 @jwt_required()
 def employee_create_one():
     try:
+        # data = EmployeeSchema().load(request.json)
         employee = Employee(
             email = request.json['email'],
             name = request.json['name'],
@@ -44,7 +46,9 @@ def employee_create_one():
         return {'error': 'Email address already exists'}, 409
     
 @employee_bp.route('/<int:id>', methods=['PUT', 'PATCH'])
+@jwt_required()
 def employee_update_one(id):
+    authorize()
     stmt = db.select(Employee).filter_by(id=id)
     employee = db.session.scalar(stmt)
     if employee:
@@ -58,7 +62,9 @@ def employee_update_one(id):
         return {'error' : f'Employee not found with id {id}'}, 404
     
 @employee_bp.route('/<int:id>', methods=['DELETE'])
+@jwt_required()
 def employee_delete_one(id):
+    authorize()
     stmt = db.select(Employee).filter_by(id=id)
     employee = db.session.scalar(stmt)
     if employee:
