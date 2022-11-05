@@ -28,15 +28,15 @@ def employee_get_one(id):
 @jwt_required()
 def employee_create_one():
     try:
-        # data = EmployeeSchema().load(request.json)
+        data = EmployeeSchema().load(request.json)
         employee = Employee(
-            email = request.json['email'],
-            name = request.json['name'],
-            password = bcrypt.generate_password_hash(request.json['password']).decode('utf-8'),
+            email = data['email'],
+            name = data['name'],
+            password = bcrypt.generate_password_hash(data['password']).decode('utf-8'),
             hire_date = date.today(),
-            salary = request.json['salary'],
-            job_id = request.json['job_id'],
-            department_id = request.json['department_id']
+            salary = data['salary'],
+            job_id = data['job_id'],
+            department_id = data['department_id']
         )
         db.session.add(employee)
         db.session.commit()
@@ -52,9 +52,27 @@ def employee_update_one(id):
     stmt = db.select(Employee).filter_by(id=id)
     employee = db.session.scalar(stmt)
     if employee:
-        employee.email = request.json.get('email') or employee.email,
-        employee.name = request.json.get('name') or employee.name,
-        employee.hire_date = request.json.get('hire_date') or employee.hire_date,
+        data = EmployeeSchema().load(request.json)
+        if data['email']:
+            employee = Employee(email = data['email'])
+        else:
+            employee = Employee(email = employee.email)
+        if data['name']:
+            employee = Employee(name = data['name'])
+        else:
+            employee = Employee(name = employee.name)
+        if data['hire_date']:
+            employee = Employee(hire_date = data['hire_date'])
+        else:
+            employee = Employee(hire_date = employee.hire_date)
+        if data['salary']:
+            employee = Employee(salary = data['salary'])
+        else:
+            employee = Employee(salary = employee.salary)
+        
+        employee.email = request.json.get('email') or employee.email
+        employee.name = request.json.get('name') or employee.name
+        employee.hire_date = request.json.get('hire_date') or employee.hire_date
         employee.salary = request.json.get('salary') or employee.salary
         db.session.commit()
         return EmployeeSchema(exclude=['password']).dump(employee)

@@ -1,9 +1,10 @@
 from datetime import date
 from flask import Blueprint, request, abort
 from sqlalchemy.exc import IntegrityError
-from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
+from flask_jwt_extended import jwt_required
 from init import db, bcrypt
 from models.job import Job, JobSchema
+from controllers.auth_controller import authorize
 
 job_bp = Blueprint('job', __name__, url_prefix='/job')
 
@@ -24,10 +25,12 @@ def job_get_one(id):
     
 
 @job_bp.route('/', methods=['POST'])
+@jwt_required()
 def job_create_one():
     try:
+        data = JobSchema().load(request.json)
         job = Job(
-            job_title = request.json['job_title'],
+            job_position = data['job_position'],
         )
         db.session.add(job)
         db.session.commit()
@@ -37,18 +40,23 @@ def job_create_one():
         return {'error': 'Data duplicated'}, 409
     
 @job_bp.route('/<int:id>', methods=['PUT', 'PATCH'])
+@jwt_required()
 def job_update_one(id):
+    authorize()
     stmt = db.select(Job).filter_by(id=id)
     job = db.session.scalar(stmt)
     if job:
-        job.job_title = request.json.get('job_title') or job.job_title
+        data = JobSchema().load(request.json)
+        job.job_position = data('job_position') or job.job_position
         db.session.commit()
         return JobSchema().dump(job)
     else:
         return {'error' : f'Job not found with id {id}'}, 404
     
 @job_bp.route('/<int:id>', methods=['DELETE'])
+@jwt_required()
 def job_delete_one(id):
+    authorize()
     stmt = db.select(Job).filter_by(id=id)
     job = db.session.scalar(stmt)
     if job:

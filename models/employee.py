@@ -7,8 +7,10 @@ class Employee(db.Model):
     __tablename__ = 'employees'
     
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    email = db.Column(db.String, nullable=False, unique=True)
+    # name = db.Column(db.String(100), nullable=False)
+    name = db.Column(db.String(100))
+    # email = db.Column(db.String, nullable=False, unique=True)
+    email = db.Column(db.String)
     password = db.Column(db.String, nullable=False)
     hire_date = db.Column(db.Date)
     salary = db.Column(db.Integer)
@@ -26,16 +28,13 @@ class Employee(db.Model):
 class EmployeeSchema(ma.Schema):
     job = fields.Nested('JobSchema', exclude=['max_salary', 'min_salary'])
     department = fields.Nested('DepartmentSchema')
-    email = fields.String(required=True, validate=Length(min=2, error='Email must be at least 2 characters long'))
-    name = fields.String(required=True, validate=Length(min=2, error='Name must be at least 2 characters long'))
+    # email = fields.String(required=True, validate=Length(min=2, error='Email must be at least 2 characters long'))
+    # name = fields.String(required=True, validate=Length(min=2, error='Name must be at least 2 characters long'))
     
     @validates('name')
     def validate_name(self, value):
-        # if not value:
-            # raise AssertionError('Name cannot be blank')
         stmt = db.select(Employee).filter_by(name = value)
         name_check = db.session.scalar(stmt)
-        print('####yogida5 :', name_check.name, '/', value)
         if name_check:
             raise ValidationError('You already have the same name')
 
@@ -49,7 +48,7 @@ class EmployeeSchema(ma.Schema):
             raise ValidationError('You already have the same email')
         
     class Meta:
-        fields = ('id', 'name', 'email', 'password', 'salary','hire_date', 'job', 'department')
+        fields = ('id', 'name', 'email', 'password', 'salary','hire_date', 'job_id', 'department_id', 'job', 'department')
         ordered = True        
     
     

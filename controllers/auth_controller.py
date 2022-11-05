@@ -1,7 +1,7 @@
 from datetime import timedelta
 import email
 from xml.etree.ElementInclude import include
-from flask import Blueprint, request, abort, jsonify
+from flask import Blueprint, request, abort
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import join
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
@@ -12,7 +12,7 @@ from models.hrstaff import Hrstaff, HrstaffSchema
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 @auth_bp.route('/')
-def auth_get_employees():
+def auth_get_hrstaff():
     stmt = db.select(Hrstaff).order_by(Hrstaff.id.asc())
     # stmt = db.select(Employee, Hrstaff.is_admin).\
     #           join(Employee.hrstaffs)
@@ -56,10 +56,10 @@ def auth_add():
     else:
         return {'message': f'{employee.email} is not HR staff'}
       
-@auth_bp.route('/logout/', methods=['DELETE'])
-@jwt_required()
-def auth_logout():
-    return {'massage': f'{get_jwt_identity()} is logout '}
+# @auth_bp.route('/logout/', methods=['DELETE'])
+# @jwt_required()
+# def auth_logout():
+#     return {'massage': f'{get_jwt_identity()} is logout '}
   
 @auth_bp.route('/delete/<int:id>/', methods=['DELETE'])
 @jwt_required()

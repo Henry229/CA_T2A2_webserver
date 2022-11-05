@@ -1,9 +1,10 @@
 from datetime import date
 from flask import Blueprint, request, abort
 from sqlalchemy.exc import IntegrityError
-from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
+from flask_jwt_extended import get_jwt_identity, jwt_required
 from init import db, bcrypt
 from models.department import Department, DepartmentSchema
+from controllers.auth_controller import authorize
 
 department_bp = Blueprint('department', __name__, url_prefix='/department')
 
@@ -24,10 +25,12 @@ def department_get_one(id):
     
 
 @department_bp.route('/', methods=['POST'])
+@jwt_required()
 def department_create_one():
     try:
+        data = DepartmentSchema().load(request.json)
         department = Department(
-            department_name = request.json['department_name'],
+            department_name = data['department_name'],
         )
         db.session.add(department)
         db.session.commit()
@@ -37,7 +40,9 @@ def department_create_one():
         return {'error': 'Data duplicated'}, 409
     
 @department_bp.route('/<int:id>', methods=['PUT', 'PATCH'])
+@jwt_required()
 def department_update_one(id):
+    authorize()
     stmt = db.select(Department).filter_by(id=id)
     department = db.session.scalar(stmt)
     if department:
@@ -48,7 +53,9 @@ def department_update_one(id):
         return {'error' : f'Employee not found with id {id}'}, 404
     
 @department_bp.route('/<int:id>', methods=['DELETE'])
+@jwt_required()
 def department_delete_one(id):
+    authorize()
     stmt = db.select(Department).filter_by(id=id)
     department = db.session.scalar(stmt)
     if department:

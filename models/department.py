@@ -10,14 +10,19 @@ class Department(db.Model):
     
     id = db.Column(db.Integer, primary_key=True)
     department_name = db.Column(db.String)
-    # manager_id = db.Column(db.Integer, db.ForeignKey('employees.id'), nullable=False)
-    # manages = db.relationship('Employee', back_populates ='department')
     
     employees = db.relationship('Employee', back_populates ='department', cascade='all, delete')
     
     
 class DepartmentSchema(ma.Schema):
-    department_name = fields.String(required=True, Validate=OneOf(VALID_DEPARTMENTS))
+    department_name = fields.String(required=True, validate=OneOf(VALID_DEPARTMENTS))
+    @validates('department_name')
+    def validate_department_name(self, value):
+        stmt = db.select(Department).filter_by(department_name = value)
+        department_check = db.session.scalar(stmt)
+        if department_check:
+            raise ValidationError('You already have the same department name')
+          
     class Meta:
         fields = ('id', 'department_name')
     

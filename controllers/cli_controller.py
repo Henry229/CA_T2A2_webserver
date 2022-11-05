@@ -38,22 +38,22 @@ def seed_db():
        
     jobs = [
         Job(
-          job_title = 'Junior',
+          job_position = 'Junior',
         ),
         Job(
-          job_title = 'Senior',
+          job_position = 'Senior',
         ),
         Job(
-          job_title = 'Lead',
+          job_position = 'Lead',
         ),
         Job(
-          job_title = 'Manager',
+          job_position = 'Manager',
         ),
         Job(
-          job_title = 'Director',
+          job_position = 'Director',
         ),
         Job(
-          job_title = 'CEO',
+          job_position = 'CEO',
         ),
     ]
     
