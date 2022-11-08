@@ -23,6 +23,14 @@ The most important characteristic of using a database to create a system is that
 Because NoSQL is 'schemaless', data can be stored more flexibly, but RDBs used by this application rarely have schema change. On average, it is true that NoSQL is faster than RDB, and when using the same cost, NoSQL database is cost-effective in terms of performance. But this depends on which RDB you use.<br>
 NoSQL is recommended when the exact data structure is unknown and data can be changed or expanded. However, if data duplication can occur, all collections must be modified when duplicate data is changed, so it is good for systems that do not have many updates. On the other hand, because RDB guarantees data integrity and is easy to change, it is suitable for this application where related data is frequently changed.
 
+### Pros and Cons of RDB
+
+#### Benefits
+As I mentioned above, data should be saved according to the established schema, ensuring a clear dta structure. There is no duplication of data, so data consistency can be guaranteed.
+
+#### Drawbacks
+As the system grows, complex queries with many JOIN statement will make the system slow down. If you want to add columns in tables having a lot of data, you must alter table and create a new table. Moreover, improving hardware performance can be costly.
+
 Reference: https://peps.python.org/pep-0008/ <br>
 Reference: https://docs.rackspace.com/support/how-to/choosing-between-rdbms-and-nosql/
 ____
@@ -32,6 +40,34 @@ ____
 <br>
 
 ### What is ORM?
-ORM(Object-Relational Mapping) is simply setting connections between objects in object_oriented programs and relational database. For instance, 우리가 user라는 object를 만든다고 하자. 이 user object에는 D  Driver's license number, 이름, 주소, DOB, Mobil number와 같은 개인 식별 정보들이 객체에 포함된다. 이 user object는 영구적으로 저장하기 위해 데이터베이스
+ORM(Object-Relational Mapping) is simply setting connections between objects in object_oriented programs and relational database. To use RDB, you must use SQL. However, ORM automatically converts the written Python code into a SQL query of the relational DB, allowing developers to manipulate the DB only by writing Python code without having to write a separate SQL query. For example, below is an example of a SQLAlchemy model definition. We create a class named Contact with SQLAlchemy
+```py 
+  class Contact(db.Model):
+      __tablename__ = 'contacts'
+      id = db.Column(db.Integer, primary_key=True)
+      first_name = db.Column(db.String(100))
+      last_name = db.Column(db.String(100))
+      phone_number = db.Column(db.String(32)) 
+```
+If we do the migration, we can get a Contact table in Database even though we don't write any create table statement. 
+```py
+  CREATE TABLE CONTACTS(
+      ID INT PRIMARY KEY        NOT NULL,
+      FIRST_NAME     CHAR(100)  NOT NULL,
+      LAST_NAME      CHAR(100)  NOT NULL,
+      PHONE_NUMBER   CHAR(32)   NOT NULL,
+);
+```
+Reference: https://www.fullstackpython.com/sqlalchemy.html<br><br>
 
+SQLAlchemy handle the table creation by using ORM. IT can be seen a table create statement was created so that a table could be created just like the class.<br>
+In addition, all records can be retrieved by using SQLAlchemy in Python code such as `contacts = Contact.query.all()` instead of a plain SQL, `SELECT * FROM contacts`. 
 
+#### Benefits of ORM
+No need to create declaration, assignment in programs, so we can reduce development time. Once you write your data model, ORM creates Table automatically so we can improve the productivity. Also Model use OOP(Object-Oriented Programming), we can speed up development by extending and inheriting from Models. SQL injection is not easy as queries are sanitised.<br>
+
+-----
+
+## Document all endpoints for your API
+
+<br>
