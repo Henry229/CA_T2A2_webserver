@@ -1,4 +1,5 @@
 from flask import Flask
+# from json import JSONDecodeError
 from init import db, ma, bcrypt, jwt
 from controllers.cli_controller import db_commands
 from controllers.auth_controller import auth_bp
@@ -14,6 +15,11 @@ def create_app():
     @app.errorhandler(ValidationError)
     def validation_error(err):
         return {'error': err.messages}, 400
+    
+    # @app.errorhandler(JSONDecodeError)
+    @app.errorhandler(400)
+    def json_decode(err):
+        return {'error': str(err)}, 400
     
     @app.errorhandler(404)
     def not_found(err):

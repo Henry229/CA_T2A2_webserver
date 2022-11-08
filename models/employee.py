@@ -7,10 +7,8 @@ class Employee(db.Model):
     __tablename__ = 'employees'
     
     id = db.Column(db.Integer, primary_key=True)
-    # name = db.Column(db.String(100), nullable=False)
-    name = db.Column(db.String(100))
-    # email = db.Column(db.String, nullable=False, unique=True)
-    email = db.Column(db.String)
+    name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String, nullable=False, unique=True)
     password = db.Column(db.String, nullable=False)
     hire_date = db.Column(db.Date)
     salary = db.Column(db.Integer)
@@ -19,17 +17,16 @@ class Employee(db.Model):
     department_id = db.Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
     # manager_id = db.Column(db.Integer, db.ForeignKey('managements.id'), nullable=False)
     
-    job = db.relationship('Job', back_populates ='employees')
-    department = db.relationship('Department', back_populates ='employees')
-    
+    job = db.relationship('Job', back_populates ='employees', cascade='all, delete')
+    department = db.relationship('Department', back_populates ='employees', cascade='all, delete')
     hrstaffs = db.relationship('Hrstaff', back_populates ='employees', cascade='all, delete')
     
     
 class EmployeeSchema(ma.Schema):
     job = fields.Nested('JobSchema', exclude=['max_salary', 'min_salary'])
     department = fields.Nested('DepartmentSchema')
-    # email = fields.String(required=True, validate=Length(min=2, error='Email must be at least 2 characters long'))
-    # name = fields.String(required=True, validate=Length(min=2, error='Name must be at least 2 characters long'))
+    email = fields.String(validate=Length(min=2, error='Email must be at least 2 characters long'))
+    name = fields.String(validate=Length(min=2, error='Name must be at least 2 characters long'))
     
     @validates('name')
     def validate_name(self, value):

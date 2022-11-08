@@ -46,7 +46,9 @@ def department_update_one(id):
     stmt = db.select(Department).filter_by(id=id)
     department = db.session.scalar(stmt)
     if department:
-        department.department_name = request.json.get('department_name') or department.department_name,
+        data = DepartmentSchema().load(request.json)
+        
+        department.department_name = data.get('department_name') or department.department_name,
         db.session.commit()
         return DepartmentSchema().dump(department)
     else:

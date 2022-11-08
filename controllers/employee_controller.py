@@ -53,27 +53,13 @@ def employee_update_one(id):
     employee = db.session.scalar(stmt)
     if employee:
         data = EmployeeSchema().load(request.json)
-        if data['email']:
-            employee = Employee(email = data['email'])
-        else:
-            employee = Employee(email = employee.email)
-        if data['name']:
-            employee = Employee(name = data['name'])
-        else:
-            employee = Employee(name = employee.name)
-        if data['hire_date']:
-            employee = Employee(hire_date = data['hire_date'])
-        else:
-            employee = Employee(hire_date = employee.hire_date)
-        if data['salary']:
-            employee = Employee(salary = data['salary'])
-        else:
-            employee = Employee(salary = employee.salary)
-        
-        employee.email = request.json.get('email') or employee.email
-        employee.name = request.json.get('name') or employee.name
-        employee.hire_date = request.json.get('hire_date') or employee.hire_date
-        employee.salary = request.json.get('salary') or employee.salary
+                
+        employee.email = data.get('email') or employee.email
+        employee.name = data.get('name') or employee.name
+        employee.hire_date = data.get('hire_date') or employee.hire_date
+        employee.salary = data.get('salary') or employee.salary
+        employee.job_id = data.get('job_id') or employee.job_id
+        employee.department_id = data.get('department_id') or employee.department_id
         db.session.commit()
         return EmployeeSchema(exclude=['password']).dump(employee)
     else:

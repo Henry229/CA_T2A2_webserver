@@ -11,8 +11,8 @@ class Job(db.Model):
     
     id = db.Column(db.Integer, primary_key=True)
     job_position = db.Column(db.String)
-    min_salary = db.Column(db.Integer)
-    max_salary = db.Column(db.Integer)
+    # min_salary = db.Column(db.Integer)
+    # max_salary = db.Column(db.Integer)
     
     employees = db.relationship('Employee', back_populates ='job', cascade='all, delete')
     
