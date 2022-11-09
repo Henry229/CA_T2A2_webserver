@@ -15,7 +15,7 @@ class Department(db.Model):
     
     
 class DepartmentSchema(ma.Schema):
-    department_name = fields.String(required=True, validate=OneOf(VALID_DEPARTMENTS))
+    department_name = fields.String(validate=OneOf(VALID_DEPARTMENTS))
     @validates('department_name')
     def validate_department_name(self, value):
         stmt = db.select(Department).filter_by(department_name = value)

@@ -11,8 +11,6 @@ class Job(db.Model):
     
     id = db.Column(db.Integer, primary_key=True)
     job_position = db.Column(db.String)
-    # min_salary = db.Column(db.Integer)
-    # max_salary = db.Column(db.Integer)
     
     employees = db.relationship('Employee', back_populates ='job', cascade='all, delete')
     
@@ -26,5 +24,5 @@ class JobSchema(ma.Schema):
         if job_check:
             raise ValidationError('You already have the same job position name')
     class Meta:
-        fields = ('id', 'job_position', 'min_salary', 'max_salary')
+        fields = ('id', 'job_position')
     
