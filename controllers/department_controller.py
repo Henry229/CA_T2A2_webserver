@@ -22,10 +22,11 @@ def department_get_all():
 @department_bp.route('/<int:id>/')
 def department_get_one(id):
     # Get an instance from departments table matching with parameter id
+    # select * from departments where id = id
     stmt = db.select(Department).filter_by(id=id)
     department = db.session.scalar(stmt)
     if department: # if found
-        # Returning an instance from department table
+        # Returning an instance from departments table
         return DepartmentSchema().dump(department)
     else:
         # if not found department id return 404 error
@@ -36,7 +37,7 @@ def department_get_one(id):
 # check if HR staff
 @jwt_required()
 def department_create_one():
-    # Using try: except: if a new department added is already in departments table 
+    # Using try: except: check if a new department added is already in departments table 
     try:
         # change request.json to a format of python object
         data = DepartmentSchema().load(request.json)
