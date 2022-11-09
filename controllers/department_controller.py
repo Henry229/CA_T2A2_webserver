@@ -15,10 +15,10 @@ def department_get_all():
     # select * from departments;
     stmt = db.select(Department).order_by(Department.id.asc())
     departments = db.session.scalars(stmt)
-    # Returning all departments in departments table
+    # Returning all instances in departments table with DepartmentSchema format
     return DepartmentSchema(many=True).dump(departments)
 
-# fetch an instance from departments table what you want to retrieve
+# fetch an instance from departments table that you want to retrieve
 @department_bp.route('/<int:id>/')
 def department_get_one(id):
     # Get an instance from departments table matching with parameter id
@@ -74,14 +74,14 @@ def department_update_one(id):
         # Returning not found error 404 
         return {'error' : f'Employee not found with id {id}'}, 404
 
-# Delete one instance in department table that you want to delete
+# Delete one instance in departments table that you want to delete
 @department_bp.route('/<int:id>', methods=['DELETE'])
 # check if HR staff
 @jwt_required()
 def department_delete_one(id):
     # if admin 
     authorize()
-    # get an instance of department table matching with parameter ID 
+    # get an instance of departments table matching with parameter ID 
     # select * from departments where id = id
     stmt = db.select(Department).filter_by(id=id)
     department = db.session.scalar(stmt)
