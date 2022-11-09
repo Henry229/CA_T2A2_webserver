@@ -66,6 +66,11 @@ In addition, all records can be retrieved by using SQLAlchemy in Python code suc
 #### Benefits of ORM
 No need to create declaration, assignment in programs, so we can reduce development time. Once you write your data model, ORM creates Table automatically so we can improve the productivity. Also Model use OOP(Object-Oriented Programming), we can speed up development by extending and inheriting from Models. SQL injection is not easy as queries are sanitised.<br>
 
+Reference: https://www.freecodecamp.org/news/what-is-an-orm-the-meaning-of-object-relational-mapping-database-tools/<br>
+Reference: https://www.learnnowonline.com/blogs/2012/08/28/4-benefits-of-object-relational-mapping-orm<br>
+Reference: https://midnite.uk/blog/the-pros-and-cons-of-object-relational-mapping-orm
+
+
 -----
 
 ## Document all endpoints for your API
