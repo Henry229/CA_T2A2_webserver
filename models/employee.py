@@ -19,11 +19,11 @@ class Employee(db.Model):
     
     job = db.relationship('Job', back_populates ='employees', cascade='all, delete')
     department = db.relationship('Department', back_populates ='employees', cascade='all, delete')
-    hrstaffs = db.relationship('Hrstaff', back_populates ='employees', cascade='all, delete')
+    hrstaffs = db.relationship('Hrstaff', back_populates ='employees', uselist=False, cascade='all, delete')
     
     
 class EmployeeSchema(ma.Schema):
-    job = fields.Nested('JobSchema', exclude=['max_salary', 'min_salary'])
+    job = fields.Nested('JobSchema')
     department = fields.Nested('DepartmentSchema')
     email = fields.String(validate=Length(min=2, error='Email must be at least 2 characters long'))
     name = fields.String(validate=Length(min=2, error='Name must be at least 2 characters long'))

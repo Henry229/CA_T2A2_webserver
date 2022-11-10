@@ -93,14 +93,6 @@ Reference: https://midnite.uk/blog/the-pros-and-cons-of-object-relational-mappin
 
 <br>
 
-- Get a HR staff
-  - HTTP request verb : GET
-  - Required data where applicable : id parameter
-  - Expected response data : 'id', 'is_admin', 'employees', 'employee_id', 'email'
-  - Authentication methods where applicable: N/A
-
-<br>
-
 - Add a new HR staff
   - HTTP request verb : POST
   - Required data where applicable : employee_id, is_admin
@@ -225,10 +217,10 @@ Reference: https://midnite.uk/blog/the-pros-and-cons-of-object-relational-mappin
 <br>
 
 - Add a new job
-  - HTTP request verb : GET
-  - Required data where applicable : id parameter
+  - HTTP request verb : POST
+  - Required data where applicable : All fields in jobs table
   - Expected response data : 'id', 'job_position'
-  - Authentication methods where applicable: N/A
+  - Authentication methods where applicable: Token by JWT
 
 <br>
 
@@ -248,6 +240,126 @@ Reference: https://midnite.uk/blog/the-pros-and-cons-of-object-relational-mappin
 
 <br>
 
+### Documentation of all endpoints By POSTMAN
+I created documentation of all endpoints by using POSTMAN.
+
+[Documentation By POSTMAN](https://documenter.getpostman.com/view/18820618/2s8YekQurc)
+
+
+----
+<br>
+
+## R6. An ERD for your app
+
+![ERD](images/erd.png)
+
+-----
+
+## R7. Detail any third party services that your app will use
+what exactly is a service? the service is when your app connects to a third party
+
+### Flask_Bcrypt
+
+<br>
+
+Flask Bcrypt is called as a flask extension that allows us to use hashing functions. This is for protecting password using hashing function. In addition, we improved the vulnerability of existing hash functions and prepared for hacking such as rainbow attack. Methods such as salting and key stretching can be added here to encrypt deeper and secure personal information more reliably. This Bcrypt was used in my application to encrypt passwords in the employees table.
+
+Reference: https://www.educba.com/flask-bcrypt/
+
+### Flask-JWT-Extended
+
+<br>
+
+JWT stands for JSON Web Token. When a user logs in, how to keep login status has developed in various ways. The next step after cookies and sessions is the token-based user authentication method using JWT.
+It is a method of simply putting information that can identify user information in the token and using this JWT token when authentication is required. It consists of header, payload, and signature. Header and payload can be decoded and checked by anyone, so do not include information such as user's 
+password. VerifySignature cannot be decrypted without knowing the secret key.
+
+<br>
+
+![ERD](images/jwt.png)
+
+### Process of JWT
+
+- A Server receives a token and verify if signature is valid
+- If it is considered valid, decode the claim set and open the data contained in the token
+- It contains the expiration time, so check if the token is available and use it immediately if there is no problem
+
+In my application, I used it to check whether user is an staff of HR team in the API that has features of 'update', 'delete', and 'insert',
+
+Reference: https://github.com/vimalloc/flask-jwt-extended <br>
+Reference: https://4geeks.com/lesson/what-is-JWT-and-how-to-implement-with-Flask
+
+
+### Flask-marshmallow
+
+<br>
+
+Marshmallow is a utility that helps serialize, de-serialize, and validate Python objects. For example, you can use it to validate the payload of POST requests that come into the web server, or to convert Python objects to JSON to return them to response. Briefly, Deserialize input data to app-level objects. Serialize the objects to primitive Python types. The serialized objects can then be rendered to standard formats such as JSON for use in an HTTP API.
+
+Reference: https://github.com/marshmallow-code/marshmallow
+
+### Flask-SQLAlchemy
+<br>
+
+SQlAlchemy is one of the ORMs available on Python. SQL had to be written to fetch the desired data from the database, but there is an ORM that replaces the SQL role in the application. In fact, you can connect to the database in the application and manage the data with only code without executing the query. In this way, SQLAlchemy interprets the Python class as a table in RDB and converts the language of SQL Alchemy similar to Python into SQL. It also makes connection of the database easier and automatically provides maintenance for the connection. In my application, models of each table and statements to manage DB's data in each API are used.
+
+<br>
+
+```py 
+class Employee(db.Model):
+    __tablename__ = 'employees'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String, nullable=False, unique=True)
+    password = db.Column(db.String, nullable=False)
+    hire_date = db.Column(db.Date)
+    salary = db.Column(db.Integer)
+```
+
+### pip-review
+
+<br>
+
+pip-review is a python library that updates the currently installed pip list to the latest list. Run `pip-review` to display a list of packages with the latest version released. Then, run `pip-review -aC `to install the latest version of the currently installed pip list. As I learned in class, I check the latest version with `pip-review` before creating requirements.txt.
+
+Reference: https://pypi.org/project/pip-review/<br>
+Reference: https://stackabuse.com/python-update-all-packages-with-pip-review/
+
+### psycopg2
+
+<br>
+
+Psycopg2 is a adapter that is used between PostgreSQL DB and flask application. In my applicationm, this is applied for connectiong postgreSQL. <br>
+`DATABASE_URL=postgresql+psycopg2://{user ID}:{password}}@127.0.0.1:5432/t2a2_db`
+
+### python-dotenv
+<br>
+This Python module takes its configuration from environment variables. In other word, Rather than hardcoded sensitive information such as API key and db access information are put in the source code directrly, it is stored separately in `.env` using an environment variable paired with key and value.
+
+<br>
+
+In my application, if you have a look at `main.py` 
+
+```py
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+    app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY')
+```
+DB access information and set_key information are stored separately in `.env` file using an environment variable.
+
+
+    
+
+------
+
+## R8. Describe your projects models in terms of the relationships they have with each other
+
+----
+
+## R9. Discuss the database relations to be implemented in your application
+
 ---
 
+## R10. Describe the way tasks are allocated and tracked in your project
 
+----
