@@ -251,12 +251,128 @@ I created documentation of all endpoints by using POSTMAN.
 
 ## R6. An ERD for your app
 
+<br>
+
+## Database Modeling 
+
+<br>
+
+### Analyse the requirements of my application
+
+<br>
+
+```
+   - Employees has Name, Email, Password, Hire_date, Salary, Job_id, and Department_id
+   - Department has department_name
+   - Job has job_position
+   - HR staffs have employee_id, is_admin
+   - Department has many employees 
+   - Job_position be assigned to many employees
+   - Only Employees in HR department can register in HR staff
+```
+<br>
+
+### Conceptual Data Model
+
+<br>
+
+- We can create Conceptual data model based on the requirements analysis by extracting entities and attributes.
+<br>
+
+![table](images/table_entity_attribute.png)
+
+<b><u>Why did each entities have this structure?</u></b>
+<br>
+
+<b>Employees</b>
+<br>
+
+  The HR management system requires personal information of employees, 'salary' for annual salary management, 'job_position' for promotion management, 'department_id' for career management, and 'hire_date' information. Therefore, the employees entity which is the main entity of the HR management system is managed with this structured data.
+<br>
+
+<b>Departments</b>
+<br>
+
+For employees' movement between departments and career management, department entity has department_name.
+
+<b>Jobs</b>
+<br>
+
+For promotion management and career management of employees, the job_position attribute is in the jobs entity
+
+<b>Hrstaffs</b>
+<br>
+
+It is necessary to manage the HR management system by registering the staff in HR department. Therefore, hrstaffs has 'employee_id' and 'is_admin' attributes
+
+<br>
+
+----
+<br>
+
+Establish a relationship between the entities based on the entities and the requirements above
+
+
+![relation](images/cardinality.png)
+
+<br>
+
+### Cardinality
+<br>
+<u>[Hrstaffs] : [Employees] = 1 : 1</u>
+
+<br>
+
+The hrstaff entity is created in the employee entity. Only employees who work in the HR department among those registered in the employee entity are registered in hrstaffs entity. Thus, the relationship between both is bound to `1:1`.
+
+<br>
+
+![1:1](images/1-1.png)
+
+<br>
+<u>[Departments] : [Employees] = 1 : N</u>
+
+<br>
+
+As I said in the requirements analysis, a department has multiple employees. So this relationship is represented as `1:N`. The department entity becomes the parent and the employee becomes the child.
+
+<br>
+
+![1:1](images/dept_emp.png)
+
+<br>
+<u>[Jobs] : [Employees] = 1 : N</u>
+
+<br>
+
+The relationship between job entity and employee entity is also `1:N`. Because one job position has lots of employees. Similarly, jobs entity is the parent and employees entity becomes the child.
+
+<br>
+
+![1:1](images/job_emp.png)
+
+### Logical Data Model
+
+<br>
+
 ![ERD](images/erd.png)
+
+<br>
+So the entire ERD is generated as above.
+
+<br>
+
+### Physical Data Model
+
+<br>
+
+The physical model will be described in Requirement R8.
+
+Reference: https://www.lucidchart.com/pages/er-diagrams
 
 -----
 
 ## R7. Detail any third party services that your app will use
-what exactly is a service? the service is when your app connects to a third party
 
 ### Flask_Bcrypt
 
@@ -317,6 +433,9 @@ class Employee(db.Model):
     salary = db.Column(db.Integer)
 ```
 
+Reference: https://www.digitalocean.com/community/tutorials/how-to-use-flask-sqlalchemy-to-interact-with-databases-in-a-flask-application<br>
+
+
 ### pip-review
 
 <br>
@@ -346,17 +465,28 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
     app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY')
 ```
 DB access information and set_key information are stored separately in `.env` file using an environment variable.
-
-
-    
+```py 
+DATABASE_URL=postgresql+psycopg2://{user ID}:{password}}@127.0.0.1:5432/t2a2_db
+```
 
 ------
 
 ## R8. Describe your projects models in terms of the relationships they have with each other
 
+Employee
+모델 스크린샷 - sqlalchemy.
+이 테이블과 참조가 일어나는 tabel은 뭐고 포린키는 어떻게 작동되고 포린키 제약조건은 뭔지
+back populating과 부모 자식간의 관계 설명
+
+
 ----
 
 ## R9. Discuss the database relations to be implemented in your application
+
+<br>
+
+model 정의한거 스크린샷하고 그 필드에 대해서 설명하고, 이것이 sql alchemy가 실제로 어떻게 작동하는지, card와 user간에 어떤 참조가 발생하는지? 데이터 베이스안에서 어떤 관계가 존재하는지? foreign key constraint 이 무엇인지? sql alchemy 모델에서 컬럼에 있는 foreign Key 제약조건을 뭘 나타내는지? back_populating과 foreign key method()에 대해서 설명. postgreSQL에서 부모, 자식, set/lists/collection types에 대해서 설명. 1-m, m-m., 1-1 관계에 대해서 설명
+
 
 ---
 
