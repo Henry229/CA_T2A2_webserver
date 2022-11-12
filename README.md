@@ -609,13 +609,113 @@ hrstaffs = db.relationship('Hrstaff', back_populates ='employees', uselist=False
 ```
 -  `uselist=False` indicate one-to-one relationship
 
+## Schema
+
+If a FrontEnd team creates a web page and try to connect to my application to talk data they want, each endpoints in my application must return the data to JSON format. Schema defines the part that support this return data.
+
+## Employee Schema
+
+The return field defined in the employees model using `marshmallow` is as follows.
+
+```py
+class Meta:
+        fields = ('id', 'name', 'email', 'password', 'salary','hire_date', 'job_id', 'department_id', 'job', 'department')
+        ordered = True   
+```
+Among the fields, job and department represent the contents of `job_id` and `department_id` referred to as `foreign key`.  Displaying job_id and department_id as code in a way causes users have to query it again to check the values. So you can add this part to the output field to help you understand by displaying its content of each ID. To do this, the following statements were added to the employee schema.
+```py
+job = fields.Nested('JobSchema')
+    department = fields.Nested('DepartmentSchema')
+```
+As defined in the `job schema` and `department schema`, the values are returned in the `Nest` format as follows to make frontend team work easier.
+```py
+       "department": {
+            "department_name": "Human Resources",
+            "id": 1
+        },
+        "department_id": 1,
+```
+
+## Hrstaffs Schema
+
+In the Hrstaffs schema, as in the employee schema above, the corresponding information is shown by adding a field called `employees`.
+```py
+employees = fields.Nested('EmployeeSchema', exclude=['password'])
+class Meta:
+        fields = ('id', 'is_admin', 'employees', 'employee_id', 'email')
+```
+In the employees model, the `password` must be excluded from the output field.
+
+## Department Schema
+
+The department schema constitutes an output field just like the model information.
+```py
+class Meta:
+        fields = ('id', 'department_name')
+```
+
+## Job Schema
+
+The job schema also has the same fields of the model as below.
+```py
+class Meta:
+        fields = ('id', 'job_position')
+```
+
+
+
+
 ----
 
 # R9. Discuss the database relations to be implemented in your application
 
 <br>
+If you look at how the model above is actually implemented, it will look like the below.
 
-model 정의한거 스크린샷하고 그 필드에 대해서 설명하고, 이것이 sql alchemy가 실제로 어떻게 작동하는지, card와 user간에 어떤 참조가 발생하는지? 데이터 베이스안에서 어떤 관계가 존재하는지? foreign key constraint 이 무엇인지? sql alchemy 모델에서 컬럼에 있는 foreign Key 제약조건을 뭘 나타내는지? back_populating과 foreign key method()에 대해서 설명. postgreSQL에서 부모, 자식, set/lists/collection types에 대해서 설명. 1-m, m-m., 1-1 관계에 대해서 설명
+<br>
+
+### Employees table in database
+
+![employees](/images/table_employees.png)
+
+The table is well implemented in SQLAlchemy as we define it. In the employees table, the id is the primary key, and the `department_id` of the department table and the `job_id` of the job table refer to each table as the foreign key. It also refers to the ID where `employee_id`, which is the foreign key of the hrstaffs table, is the primary key of the employees table.
+
+<br>
+
+### Hrstaffs table in database
+
+![hrstaffs](/images/table_hrstaffs.png)
+
+This table refers to the ID that is primary key. The foreign key, employee_id is referenced by the primary key of the employee table.
+
+### Departments table in database
+
+![department](/images/table_departments.png)
+
+ID is set to primary key. Employee_id is referenced by departments whose ID is foreign key in the employees table. It is said that the departments table is parents and the employees table is child.
+
+### Jobs table in database
+
+![jobs](/images/table_jobs.png)
+ID is primary key in this table. The foreign key, job_id is referenced by the primary key of the jobs table. It refers to relationships that the jobs table is parents and the employees table is child.
+
+## Relationship
+
+### Hrstaffs : Employees = one to one relationship
+
+![HE](/images/ER_HE.png)
+
+one Employees must have one Hrstaff. It's not a option but a mandatory. The reason for this relationship was explained above.
+
+### Departments : Employees = one to many relationship
+
+![DE](/images/ER_DE.png)
+one Departments must have one or more Employess. 
+
+### Jobs : Jobs = one to many relationship
+
+![JE](/images/ER_JE.png)
+one Jobs must have one or more Employees.
 
 
 ---
