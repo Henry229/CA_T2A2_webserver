@@ -12,7 +12,8 @@ class Hrstaff(db.Model):
     employee_id = db.Column(db.Integer, db.ForeignKey('employees.id'), nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
     
-    employees = db.relationship('Employee', back_populates ='hrstaffs')
+    employees = db.relationship('Employee', back_populates ='hrstaffs', uselist=False, cascade='all, delete')
+    # employees = db.relationship('Employee', back_populates ='hrstaffs', uselist=False)
     
 class HrstaffSchema(ma.Schema):
     employees = fields.Nested('EmployeeSchema', exclude=['password'])

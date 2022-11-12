@@ -467,12 +467,147 @@ DATABASE_URL=postgresql+psycopg2://{user ID}:{password}}@127.0.0.1:5432/t2a2_db
 ------
 
 # R8. Describe your projects models in terms of the relationships they have with each other
+Based on logical ERD, we can generate physical ERD, which means we create Table on the database. Because SQLAlchemy is used in this application, each entity is modeled without actual SQL coding.
 
-Employee
-모델 스크린샷 - sqlalchemy.
-이 테이블과 참조가 일어나는 tabel은 뭐고 포린키는 어떻게 작동되고 포린키 제약조건은 뭔지
-back populating과 부모 자식간의 관계 설명
 
+## Employees model
+
+The Employees table is a main table in the HR management system. So refer to this table in another table. belows are related tables.
+
+```py
+class Employee(db.Model):
+    __tablename__ = 'employees'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String, nullable=False, unique=True)
+    password = db.Column(db.String, nullable=False)
+    hire_date = db.Column(db.Date)
+    salary = db.Column(db.Integer)
+
+    job_id = db.Column(db.Integer, db.ForeignKey('jobs.id'), nullable=False)
+    department_id = db.Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
+```
+### Attributes
+
+- ID: In the Employees table, the primary key is the `ID`. 'primary_key=True' was set As a constraint.
+- Name: The employee's name is saved here. The constraint is `nullable=False` because the name should not be empty.
+- Email: Email is a very unique personal identification data. The constraints are almost the same level of primary key, 'nullable=False' and 'unique=True'
+- Job_id: The ID(PK) of the job table was set to foreign key. The constraint is `nullable=False`.
+- Department_id: The ID(PK) of the job table was set to foreign key. The constraint is `nullable=False`.
+
+## Hrstaffs model
+
+<br>
+
+```py
+class Hrstaff(db.Model):
+    __tablename__ = 'hrstaffs'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    employee_id = db.Column(db.Integer, db.ForeignKey('employees.id'), nullable=False)
+    is_admin = db.Column(db.Boolean, default=False)
+    
+```
+### Attributes
+
+- ID: The primary key is the `ID`. 'primary_key=True' is set As a constraint.
+- employee_id: The ID(PK) of the employees table is set to foreign key. The constraint is `nullable=False`.
+- is_admin: he boolean value was set to who is the admin of the HR management system. The constraint is `nullable=False`.
+<br>
+
+## Departsments model
+
+<br>
+
+```py
+class Department(db.Model):
+    __tablename__ = 'departments'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    department_name = db.Column(db.String)
+```
+### Attributes
+
+- ID: The primary key is the `ID`. 'primary_key=True' is set As a constraint.
+- department_name: This attribute is filled with department name.
+<br>
+
+## Jobs model
+
+<br>
+
+```py
+class Job(db.Model):
+    __tablename__ = 'jobs'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    job_position = db.Column(db.String)
+```
+### Attributes
+
+- ID: The primary key is the `ID`. 'primary_key=True' is set As a constraint.
+- job_position: This attribute is filled with job position.
+<br>
+
+## Relationship
+
+<br>
+
+### Departments - Employees 
+
+<br>
+
+All employees have a `department_id` on the employees table to indicate which department they are currently working in. The `ID`, which is the primary key of the parent departments, was set as the foreign key in the employees table.<br>
+The relationship with Departments is `one to many relationship`. Therefore, employees' parents is the Department table. It is defined in the models as follows.
+
+<u> Declaration of department relationship in Employees model</u>
+```py
+department = db.relationship('Department', back_populates ='employees')
+```
+<u>Declaration of employees relationship in Departments model</u>
+```py
+employees = db.relationship('Employee', back_populates ='department', cascade='all, delete')
+```
+
+- `.relationship()` method defines the relationship between two tables. The relationship between the `departments` table and the `employees` table is each of parents and children, and this method is written in the both model.
+- `back_populates`, unlike `backref`, `back_populates` must specify the relationship between both parent and child models, and specify the name of the table that is related. Then `SQLAlchemy` recognises the relationship between both with foreign key.
+- `cascade='all, delete'` Once deleting an instance also automatically deletes the matching instance of the table in which it is related. It is used it in the departments table
+
+
+### Jobs - Employees
+
+<br>
+
+All employees have their current job positions. So to represent this,  `job_id` is put in the employees table. The `ID`, which is the primary key of the parent jobs, was set to the employees table as the foreign key.<br>
+THe relationship between both tables is `one to many relationship` as well. Jobs table should be parents and employees has child relation.
+
+<u>Declaration of job relationship in Employees model</u>
+```py
+job = db.relationship('Job', back_populates ='employees')
+```
+<u>Declaration of employees relationship in jobs model</u>
+```py
+employees = db.relationship('Employee', back_populates ='job', cascade='all, delete')
+```
+The parameters in .relationship method is explained the above.
+
+### Hrstaff - Employess
+
+<br>
+
+The relationship hrstaffs with employees models is `ont-to-one relationships`, `employee_id` is put in the hrstaffs table. The `ID`, which is the primary key of the parent employees, is set to the hrstaffs table as the foreign key.<br>
+THe relationship between both tables is `one to one relationship`.
+
+<u>Declaration of employees relationship in hrstaffs model</u>
+```py
+employees = db.relationship('Employee', back_populates ='hrstaffs', uselist=False, cascade='all, delete')
+```
+<u>Declaration of hrstaffs relationship in employees model</u>
+```py
+hrstaffs = db.relationship('Hrstaff', back_populates ='employees', uselist=False, cascade='all, delete')
+```
+-  `uselist=False` indicate one-to-one relationship
 
 ----
 

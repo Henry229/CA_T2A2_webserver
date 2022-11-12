@@ -15,7 +15,6 @@ class Employee(db.Model):
 
     job_id = db.Column(db.Integer, db.ForeignKey('jobs.id'), nullable=False)
     department_id = db.Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
-    # manager_id = db.Column(db.Integer, db.ForeignKey('managements.id'), nullable=False)
     
     job = db.relationship('Job', back_populates ='employees', cascade='all, delete')
     department = db.relationship('Department', back_populates ='employees', cascade='all, delete')
