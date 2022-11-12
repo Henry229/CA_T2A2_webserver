@@ -611,7 +611,7 @@ hrstaffs = db.relationship('Hrstaff', back_populates ='employees', uselist=False
 
 ## Schema
 
-If a FrontEnd team creates a web page and try to connect to my application to talk data they want, each endpoints in my application must return the data to JSON format. Schema defines the part that support this return data.
+If a FrontEnd team creates a web page and try to connect to my application to take data they want, each endpoints in my application must return the data to JSON format. Schema defines the part that support this return data.
 
 ## Employee Schema
 
@@ -662,9 +662,6 @@ class Meta:
         fields = ('id', 'job_position')
 ```
 
-
-
-
 ----
 
 # R9. Discuss the database relations to be implemented in your application
@@ -710,16 +707,81 @@ one Employees must have one Hrstaff. It's not a option but a mandatory. The reas
 ### Departments : Employees = one to many relationship
 
 ![DE](/images/ER_DE.png)
+
 one Departments must have one or more Employess. 
 
 ### Jobs : Jobs = one to many relationship
 
 ![JE](/images/ER_JE.png)
+
 one Jobs must have one or more Employees.
 
 
 ---
 
-# R10. Describe the way tasks are allocated and tracked in your project
+# R10. Describe the way tasks are allocated and tracked in your project.
+
+----
+I used Agile methodology to create my application during the whole project. The processes of project consist of totally 5 parts such as `PLAN - DESIGN - DEVELOP - TEST - DEPLOY`. For the tasks of each stage, priority is set to determine what needs to be handled first. A checklist was placed for each to-do, and parts that should not be missed during the step.I proceeded with the project for each endpoint in the development and test stage. The API made in the design was developed and tested, and if an error occurs, retry developing, so the steps of development and test were repeated. Each project stage was created according to the agile methodology as follows.
+
+![trello](images/trello.png)
+
+[Trello for Webserver Project](Thttps://trello.com/b/9DskqVmX/t2a2-api-webserver-project)
+
+
+## PLAN
+It is the stage of establishing an overall schedule and plan for the project. For each step, decide on the due date and things to do, and plan to finish the project without any issues. The PLAN consists of `Creating Project Plan`, `Jobs related to relational Database`, and `README documentation`.
+### Creating Project Plan
+
+Create the project plan and schedule in Trello according to Agile methodology.
+- Create the due data and check list of each step in the project.
+- Plan and schedule and prioritize.
+
+### Jobs related to relational database
+
+- Analyze requirements for implementing ERD and application
+- Accurate theoretical acquisition to construct db and table in practice.
+- Practice to implement sqlalchemy and flask, etc
+- Implement CRUD
+
+### README documentation
+- Creating README document that includes requirements of this project on Canvas.
+<br>
+
+![trello](images/trello_plan.png)
+
+## Design
+
+Program and database design for implementing applications based on requirement analysis. All of these are top priority tasks.
+
+### Design ERD
+
+To implement the database, define relationship between entities. Create Primary key and foreign key to make relationship between entities.
+
+### Design for the application
+Establish the function of end points and relationship of database to be implemented.
+
+![trello_design](/images/trello_design.png)
+
+## Develop
+
+### Coding
+Implement db and programs based on design. Conduct functional testing during development. Following up the assignment requirement when coding.
+
+![trello_design](/images/trello_coding.png)
+
+## Test
+
+### Testing
+Functional tests and unit tests are performed frequently during development according to the agile methodology, and when an error is found, the development and test stages are repeated until the development is completed by correcting the error part and performing the test. Perform the unit test according to the test case and verify that the function is accurately implemented.
+
+![trello_design](/images/trello_test.png)
+
+## Deploy
+
+### Deployment
+Ensure all requirements are carried out as planned.
+
+![trello_design](/images/trello_deploy.png)
 
 ----
