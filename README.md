@@ -675,7 +675,7 @@ If you look at how the model above is actually implemented, it will look like th
 
 ### Employees table in database
 
-![employees](/docs/table_employees.png)
+![employees](docs/table_employees.png)
 
 The table is well implemented in SQLAlchemy as we define it. In the employees table, the id is the primary key, and the `department_id` of the department table and the `job_id` of the job table refer to each table as the foreign key. It also refers to the ID where `employee_id`, which is the foreign key of the hrstaffs table, is the primary key of the employees table.
 
@@ -683,38 +683,38 @@ The table is well implemented in SQLAlchemy as we define it. In the employees ta
 
 ### Hrstaffs table in database
 
-![hrstaffs](/docs/table_hrstaffs.png)
+![hrstaffs](docs/table_hrstaffs.png)
 
 This table refers to the ID that is primary key. The foreign key, employee_id is referenced by the primary key of the employee table.
 
 ### Departments table in database
 
-![department](/docs/table_departments.png)
+![department](docs/table_departments.png)
 
 ID is set to primary key. Employee_id is referenced by departments whose ID is foreign key in the employees table. It is said that the departments table is parents and the employees table is child.
 
 ### Jobs table in database
 
-![jobs](/docs/table_jobs.png)
+![jobs](docs/table_jobs.png)
 ID is primary key in this table. The foreign key, job_id is referenced by the primary key of the jobs table. It refers to relationships that the jobs table is parents and the employees table is child.
 
 ## Relationship
 
 ### Hrstaffs : Employees = one to one relationship
 
-![HE](/docs/ER_HE.png)
+![HE](docs/ER_HE.png)
 
 one Employees must have one Hrstaff. It's not a option but a mandatory. The reason for this relationship was explained above.
 
 ### Departments : Employees = one to many relationship
 
-![DE](/docs/ER_DE.png)
+![DE](docs/ER_DE.png)
 
 one Departments must have one or more Employess. 
 
 ### Jobs : Jobs = one to many relationship
 
-![JE](/docs/ER_JE.png)
+![JE](docs/ER_JE.png)
 
 one Jobs must have one or more Employees.
 
@@ -763,27 +763,27 @@ To implement the database, define relationship between entities. Create Primary 
 ### Design for the application
 Establish the function of end points and relationship of database to be implemented.
 
-![trello_design](/docs/trello_design.png)
+![trello_design](docs/trello_design.png)
 
 ## Develop
 
 ### Coding
 Implement db and programs based on design. Conduct functional testing during development. Following up the assignment requirement when coding.
 
-![trello_design](/docs/trello_coding.png)
+![trello_develop](docs/trello_coding.png)
 
 ## Test
 
 ### Testing
 Functional tests and unit tests are performed frequently during development according to the agile methodology, and when an error is found, the development and test stages are repeated until the development is completed by correcting the error part and performing the test. Perform the unit test according to the test case and verify that the function is accurately implemented.
 
-![trello_design](/docs/trello_test.png)
+![trello_test](docs/trello_test.png)
 
 ## Deploy
 
 ### Deployment
 Ensure all requirements are carried out as planned.
 
-![trello_design](/docs/trello_deploy.png)
+![trello_deploy](docs/trello_deploy.png)
 
 ----
