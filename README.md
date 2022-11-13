@@ -1,7 +1,7 @@
 # API Web server for HR management
 # R1 - Identification of the problem you are trying to solve by building this particular app.
 The HR management system is used as an important tool for strategic personnel management. It is an integrated HR management system that helps effective decision-making through integrated data management. Support performance management of each employee and increase employee satisfaction.<br>Therefore, the HR department is intended to manage all employees in the company effectively. You can see at a glance the wages, job positions, dates of employment, and departments of workers. When a request to create, modify, or delete an employee from the frontend page of HR management system, each API in this application can manipulate the employee's data in the database.<br>
-This application is accessible only to staffs working at the HR department. This is because there is sensitive private information of workers.
+<u>This application is accessible only to staffs working at the HR department.</u> This is because there is sensitive private information of workers.
 
 ----
 <br>
@@ -74,6 +74,13 @@ Reference: https://midnite.uk/blog/the-pros-and-cons-of-object-relational-mappin
 <br>
 
 # R5 - Document all endpoints for your API
+
+## Documentation of all endpoints By POSTMAN
+I created documentation of all endpoints by using POSTMAN.
+
+[Documentation By POSTMAN](https://documenter.getpostman.com/view/18820618/2s8YekQurc)
+
+
 
 <br>
 
@@ -240,11 +247,6 @@ Reference: https://midnite.uk/blog/the-pros-and-cons-of-object-relational-mappin
 
 <br>
 
-## Documentation of all endpoints By POSTMAN
-I created documentation of all endpoints by using POSTMAN.
-
-[Documentation By POSTMAN](https://documenter.getpostman.com/view/18820618/2s8YekQurc)
-
 
 ----
 <br>
@@ -279,7 +281,7 @@ I created documentation of all endpoints by using POSTMAN.
 - We can create Conceptual data model based on the requirements analysis by extracting entities and attributes.
 <br>
 
-![table](images/table_entity_attribute.png)
+![table](docs/table_entity_attribute.png)
 
 ### Why did each entities have this structure?
 <br>
@@ -305,7 +307,7 @@ It is necessary to manage the HR management system by registering the staff in H
 Establish a relationship between the entities based on the entities and the requirements above
 
 
-![relation](images/cardinality.png)
+![relation](docs/cardinality.png)
 
 <br>
 
@@ -320,7 +322,7 @@ The hrstaff entity is created in the employee entity. Only employees who work in
 
 <br>
 
-![1:1](images/1-1.png)
+![1:1](docs/1-1.png)
 
 <br>
 
@@ -332,7 +334,7 @@ As I mentioned in the requirements analysis, a department has multiple employees
 
 <br>
 
-![1:1](images/dept_emp.png)
+![1:1](docs/dept_emp.png)
 
 <br>
 
@@ -344,13 +346,13 @@ The relationship between job entity and employee entity is also `1:N`. Because o
 
 <br>
 
-![1:1](images/job_emp.png)
+![1:1](docs/job_emp.png)
 
 ## Logical Data Model
 
 <br>
 
-![ERD](images/erd.png)
+![ERD](docs/erd.png)
 
 <br>
 So the entire ERD is generated as above.
@@ -387,7 +389,7 @@ password. VerifySignature cannot be decrypted without knowing the secret key.
 
 <br>
 
-![ERD](images/jwt.png)
+![ERD](docs/jwt.png)
 
 ## Process of JWT
 
@@ -492,7 +494,7 @@ class Employee(db.Model):
 
 - ID: In the Employees table, the primary key is the `ID`. 'primary_key=True' was set As a constraint.
 - Name: The employee's name is saved here. The constraint is `nullable=False` because the name should not be empty.
-- Email: Email is a very unique personal identification data. The constraints are almost the same level of primary key, 'nullable=False' and 'unique=True'
+- Email: Email is put in this field. The constraints are 'nullable=False'.
 - Job_id: The ID(PK) of the job table was set to foreign key. The constraint is `nullable=False`.
 - Department_id: The ID(PK) of the job table was set to foreign key. The constraint is `nullable=False`.
 
@@ -673,7 +675,7 @@ If you look at how the model above is actually implemented, it will look like th
 
 ### Employees table in database
 
-![employees](/images/table_employees.png)
+![employees](/docs/table_employees.png)
 
 The table is well implemented in SQLAlchemy as we define it. In the employees table, the id is the primary key, and the `department_id` of the department table and the `job_id` of the job table refer to each table as the foreign key. It also refers to the ID where `employee_id`, which is the foreign key of the hrstaffs table, is the primary key of the employees table.
 
@@ -681,38 +683,38 @@ The table is well implemented in SQLAlchemy as we define it. In the employees ta
 
 ### Hrstaffs table in database
 
-![hrstaffs](/images/table_hrstaffs.png)
+![hrstaffs](/docs/table_hrstaffs.png)
 
 This table refers to the ID that is primary key. The foreign key, employee_id is referenced by the primary key of the employee table.
 
 ### Departments table in database
 
-![department](/images/table_departments.png)
+![department](/docs/table_departments.png)
 
 ID is set to primary key. Employee_id is referenced by departments whose ID is foreign key in the employees table. It is said that the departments table is parents and the employees table is child.
 
 ### Jobs table in database
 
-![jobs](/images/table_jobs.png)
+![jobs](/docs/table_jobs.png)
 ID is primary key in this table. The foreign key, job_id is referenced by the primary key of the jobs table. It refers to relationships that the jobs table is parents and the employees table is child.
 
 ## Relationship
 
 ### Hrstaffs : Employees = one to one relationship
 
-![HE](/images/ER_HE.png)
+![HE](/docs/ER_HE.png)
 
 one Employees must have one Hrstaff. It's not a option but a mandatory. The reason for this relationship was explained above.
 
 ### Departments : Employees = one to many relationship
 
-![DE](/images/ER_DE.png)
+![DE](/docs/ER_DE.png)
 
 one Departments must have one or more Employess. 
 
 ### Jobs : Jobs = one to many relationship
 
-![JE](/images/ER_JE.png)
+![JE](/docs/ER_JE.png)
 
 one Jobs must have one or more Employees.
 
@@ -724,9 +726,9 @@ one Jobs must have one or more Employees.
 ----
 I used Agile methodology to create my application during the whole project. The processes of project consist of totally 5 parts such as `PLAN - DESIGN - DEVELOP - TEST - DEPLOY`. For the tasks of each stage, priority is set to determine what needs to be handled first. A checklist was placed for each to-do, and parts that should not be missed during the step.I proceeded with the project for each endpoint in the development and test stage. The API made in the design was developed and tested, and if an error occurs, retry developing, so the steps of development and test were repeated. Each project stage was created according to the agile methodology as follows.
 
-![trello](images/trello.png)
+![trello](docs/trello.png)
 
-[Trello for Webserver Project](Thttps://trello.com/b/9DskqVmX/t2a2-api-webserver-project)
+[Trello for Webserver Project](https://trello.com/b/9DskqVmX/t2a2-api-webserver-project)
 
 
 ## PLAN
@@ -748,7 +750,7 @@ Create the project plan and schedule in Trello according to Agile methodology.
 - Creating README document that includes requirements of this project on Canvas.
 <br>
 
-![trello](images/trello_plan.png)
+![trello](docs/trello_plan.png)
 
 ## Design
 
@@ -761,27 +763,27 @@ To implement the database, define relationship between entities. Create Primary 
 ### Design for the application
 Establish the function of end points and relationship of database to be implemented.
 
-![trello_design](/images/trello_design.png)
+![trello_design](/docs/trello_design.png)
 
 ## Develop
 
 ### Coding
 Implement db and programs based on design. Conduct functional testing during development. Following up the assignment requirement when coding.
 
-![trello_design](/images/trello_coding.png)
+![trello_design](/docs/trello_coding.png)
 
 ## Test
 
 ### Testing
 Functional tests and unit tests are performed frequently during development according to the agile methodology, and when an error is found, the development and test stages are repeated until the development is completed by correcting the error part and performing the test. Perform the unit test according to the test case and verify that the function is accurately implemented.
 
-![trello_design](/images/trello_test.png)
+![trello_design](/docs/trello_test.png)
 
 ## Deploy
 
 ### Deployment
 Ensure all requirements are carried out as planned.
 
-![trello_design](/images/trello_deploy.png)
+![trello_design](/docs/trello_deploy.png)
 
 ----

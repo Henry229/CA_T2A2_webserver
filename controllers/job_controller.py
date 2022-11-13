@@ -39,7 +39,7 @@ def job_create_one():
     # change request.json to a format of python object
     data = JobSchema().load(request.json)
     job = Job(
-        job_position = data['job_position'],
+        job_position = data.get('job_position'),
     )
     db.session.add(job)
     db.session.commit()
@@ -60,7 +60,7 @@ def job_update_one(id):
     if job: # if found
         # change request.json to a format of python object
         data = JobSchema().load(request.json)
-        job.job_position = data('job_position') or job.job_position
+        job.job_position = data.get('job_position') or job.job_position
         db.session.commit()
         # Return successful result with JobSchema format
         return JobSchema().dump(job)

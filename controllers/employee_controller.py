@@ -103,4 +103,4 @@ def employee_delete_one(id):
         return {'message' : f'Employee id {id} deleted successfully'}
     else:
         # Returning not found error 404
-        return {'error' : f'Employee not found with id {id}'}
+        return {'error' : f'Employee not found with id {id}'}, 404
