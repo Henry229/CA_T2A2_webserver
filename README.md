@@ -1,5 +1,27 @@
 # API Web server for HR management
 [Github for T2A2](https://github.com/Henry229/CA_T2A2_webserver)
+
+## Before start
+
+- cd src 
+- Create .env file
+  
+  Add the following to .env.sample in github. I will attach as an image file rather than code.
+  ![env](docs/env.png)
+
+- Create .flaskenv
+  
+  ```py
+  FLASK_APP=main
+  FLASK_DEBUG=1
+  FLASK_RUN_PORT=8080
+  ```
+- then, activate .venv and then install requirements.txt
+- type `flask run`
+- and then `flask db create`, `flask db seed`
+
+----  
+
 # R1 - Identification of the problem you are trying to solve by building this particular app.
 The HR management system is used as an important tool for strategic personnel management. It is an integrated HR management system that helps effective decision-making through integrated data management. Support performance management of each employee and increase employee satisfaction.<br>Therefore, the HR department is intended to manage all employees in the company effectively. You can see at a glance the wages, job positions, dates of employment, and departments of workers. When a request to create, modify, or delete an employee from the frontend page of HR management system, each API in this application can manipulate the employee's data in the database.<br>
 <u>This application is accessible only to staffs working at the HR department.</u> This is because there is sensitive private information of workers.
